@@ -8,28 +8,28 @@
 #define H_PATTERN 0b01111100    // 5x125ns (8MHZ SPI), first and last bit must be zero (to remain MOSI in Low between frames/bits)
 // takes array of LED_number * 3 bytes (RGB per LED)
 
-#define I_LED GPIO_WriteReverse(GPIOE,GPIO_PIN_4)
-#define V0_LED GPIO_WriteReverse(GPIOE,GPIO_PIN_3)	
-#define V1_LED GPIO_WriteReverse(GPIOG,GPIO_PIN_3)
-#define V2_LED GPIO_WriteReverse(GPIOG,GPIO_PIN_2)
+#define I_LED GPIO_WriteReverse(GPIOD,GPIO_PIN_3)
+#define V1_LED GPIO_WriteReverse(GPIOD,GPIO_PIN_2)	
+#define V1_LED GPIO_WriteReverse(GPIOD,GPIO_PIN_1)
+#define V2_LED GPIO_WriteReverse(GPIOC,GPIO_PIN_7)
 
-#define I_button GPIO_ReadInputPin(GPIOB,GPIO_PIN_7)
-#define V0_button GPIO_ReadInputPin(GPIOF,GPIO_PIN_7)
-#define V1_button GPIO_ReadInputPin(GPIOF,GPIO_PIN_6)
-#define V2_button GPIO_ReadInputPin(GPIOF,GPIO_PIN_5)
+#define I_button GPIO_ReadInputPin(GPIOB,GPIO_PIN_5)
+#define V1_button GPIO_ReadInputPin(GPIOB,GPIO_PIN_4)
+#define VR1_button GPIO_ReadInputPin(GPIOC,GPIO_PIN_3)
+#define VR2_button GPIO_ReadInputPin(GPIOC,GPIO_PIN_4)
 
 void setup(void){
 CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1); //Taktovat MCU 16 MHz
 
-GPIO_Init(GPIOE,GPIO_PIN_4,GPIO_MODE_OUT_PP_LOW_SLOW);
-GPIO_Init(GPIOE,GPIO_PIN_3,GPIO_MODE_OUT_PP_LOW_SLOW);
-GPIO_Init(GPIOG,GPIO_PIN_3,GPIO_MODE_OUT_PP_LOW_SLOW);
-GPIO_Init(GPIOG,GPIO_PIN_2,GPIO_MODE_OUT_PP_LOW_SLOW);
+GPIO_Init(GPIOD,GPIO_PIN_3,GPIO_MODE_OUT_PP_LOW_SLOW);
+GPIO_Init(GPIOD,GPIO_PIN_2,GPIO_MODE_OUT_PP_LOW_SLOW);
+GPIO_Init(GPIOD,GPIO_PIN_1,GPIO_MODE_OUT_PP_LOW_SLOW);
+GPIO_Init(GPIOC,GPIO_PIN_7,GPIO_MODE_OUT_PP_LOW_SLOW);
 
-GPIO_Init(GPIOB,GPIO_PIN_7,GPIO_MODE_IN_PU_NO_IT);
-GPIO_Init(GPIOF,GPIO_PIN_7,GPIO_MODE_IN_PU_NO_IT);
-GPIO_Init(GPIOF,GPIO_PIN_6,GPIO_MODE_IN_PU_NO_IT);
-GPIO_Init(GPIOF,GPIO_PIN_5,GPIO_MODE_IN_PU_NO_IT);
+GPIO_Init(GPIOB,GPIO_PIN_5,GPIO_MODE_IN_PU_NO_IT);
+GPIO_Init(GPIOB,GPIO_PIN_4,GPIO_MODE_IN_PU_NO_IT);
+GPIO_Init(GPIOC,GPIO_PIN_3,GPIO_MODE_IN_PU_NO_IT);
+GPIO_Init(GPIOC,GPIO_PIN_4,GPIO_MODE_IN_PU_NO_IT);
 }
 
 void init_spi(void){
@@ -90,7 +90,7 @@ void main (void){
     init_spi();
 
     while (1){
-        //LED ACTUALIZING
+        //LED UPDATE
         neopixel(colors, sizeof(colors));
         delay_ms(2);
         
@@ -113,19 +113,19 @@ void main (void){
         }   
         I_button_past=I_button_state;                 
 
-        if (V0_button){
+        if (V1_button){
             V0_button_state=1;
 		}
         else{
             V0_button_state=0;
         }
         if (V0_button_state==1 && V0_button_past==0 && milis()-button_timer>100){
-           V0_LED;
+           V1_LED;
            button_timer=milis();
         }
         V0_button_past=V0_button_state;  
 
-        if (V1_button){
+        if (VR1_button){
             V1_button_state=1;
 		}
         else{
@@ -137,7 +137,7 @@ void main (void){
         }
         V1_button_past=V1_button_state;
 
-        if (V2_button){
+        if (VR2_button){
             V2_button_state=1;
 		}
         else{
