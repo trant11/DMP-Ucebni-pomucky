@@ -10,8 +10,8 @@
 
 #define I_LED GPIO_WriteReverse(GPIOD,GPIO_PIN_3)
 #define V1_LED GPIO_WriteReverse(GPIOD,GPIO_PIN_2)
-#define V1_LED GPIO_WriteReverse(GPIOD,GPIO_PIN_1)
-#define V2_LED GPIO_WriteReverse(GPIOC,GPIO_PIN_7)
+#define VR1_LED GPIO_WriteReverse(GPIOD,GPIO_PIN_1)
+#define VR2_LED GPIO_WriteReverse(GPIOC,GPIO_PIN_7)
 
 #define I_button GPIO_ReadInputPin(GPIOB,GPIO_PIN_5)
 #define V1_button GPIO_ReadInputPin(GPIOB,GPIO_PIN_4)
@@ -132,7 +132,7 @@ void main (void){
             V1_button_state=0;
         }
         if (V1_button_state==1 && V1_button_past==0 && milis()-button_timer>100){
-           V1_LED;
+           VR1_LED;
            button_timer=milis();
         }
         V1_button_past=V1_button_state;
@@ -144,7 +144,7 @@ void main (void){
             V2_button_state=0;
         }
         if (V2_button_state==1 && V2_button_past==0 && milis()-button_timer>100){
-           V2_LED;
+           VR2_LED;
            button_timer=milis();
         }
         V2_button_past=V2_button_state;   
